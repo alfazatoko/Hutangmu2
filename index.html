@@ -1,0 +1,301 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catatan Hutang Pro</title>
+
+<style>
+body{
+font-family:Arial, sans-serif;
+background:linear-gradient(135deg,#4f46e5,#22c1c3);
+margin:0;
+padding:20px;
+display:flex;
+justify-content:center;
+}
+
+.container{
+width:100%;
+max-width:430px;
+background:white;
+padding:20px;
+border-radius:15px;
+box-shadow:0 10px 30px rgba(0,0,0,0.25);
+}
+
+h2{
+text-align:center;
+margin-bottom:20px;
+}
+
+.input-box{
+margin-bottom:12px;
+}
+
+label{
+font-weight:bold;
+font-size:14px;
+}
+
+input{
+width:100%;
+padding:10px;
+margin-top:5px;
+border-radius:8px;
+border:1px solid #ccc;
+font-size:14px;
+}
+
+button{
+width:100%;
+padding:12px;
+border:none;
+border-radius:10px;
+background:#4f46e5;
+color:white;
+font-size:15px;
+margin-top:10px;
+cursor:pointer;
+}
+
+button:hover{
+background:#4338ca;
+}
+
+.totalBox{
+margin-top:15px;
+padding:12px;
+background:#eef2ff;
+border-radius:10px;
+font-weight:bold;
+text-align:center;
+}
+
+table{
+width:100%;
+margin-top:20px;
+border-collapse:collapse;
+font-size:13px;
+}
+
+th,td{
+padding:8px;
+border-bottom:1px solid #ddd;
+text-align:left;
+}
+
+th{
+background:#f1f5f9;
+}
+
+.lunas{
+color:green;
+font-weight:bold;
+}
+
+.belum{
+color:red;
+font-weight:bold;
+}
+
+.action button{
+width:auto;
+padding:5px 8px;
+margin-right:5px;
+font-size:12px;
+border-radius:6px;
+}
+
+.btnEdit{background:#f59e0b}
+.btnHapus{background:#ef4444}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>📒 Catatan Hutang</h2>
+
+<div class="input-box">
+<label>Nama</label>
+<input type="text" id="nama">
+</div>
+
+<div class="input-box">
+<label>Jumlah Hutang</label>
+<input type="number" id="jumlah">
+</div>
+
+<div class="input-box">
+<label>Tanggal Pinjam</label>
+<input type="date" id="tglPinjam">
+</div>
+
+<button onclick="tambah()">💾 Simpan Hutang</button>
+
+<div class="totalBox">
+Total Hutang: Rp <span id="totalHutang">0</span>
+</div>
+
+<table>
+<thead>
+<tr>
+<th>Nama</th>
+<th>Hutang</th>
+<th>Pinjam</th>
+<th>Status</th>
+<th>Aksi</th>
+</tr>
+</thead>
+
+<tbody id="data"></tbody>
+
+</table>
+
+</div>
+
+<script>
+
+let data = JSON.parse(localStorage.getItem("dataHutang")) || []
+let editIndex = -1
+
+function rupiah(x){
+return x.toLocaleString("id-ID")
+}
+
+function tampil(){
+
+let html=""
+let total=0
+
+data.forEach((d,i)=>{
+
+if(!d.lunas) total+=d.jumlah
+
+html+=`
+<tr>
+
+<td>${d.nama}</td>
+
+<td>Rp ${rupiah(d.jumlah)}</td>
+
+<td>${d.pinjam}</td>
+
+<td>
+
+<input type="checkbox" onchange="cek(${i})" ${d.lunas?'checked':''}>
+
+<br>
+
+${d.lunas ? "Lunas "+d.tglLunas : "<span class='belum'>Belum</span>"}
+
+</td>
+
+<td class="action">
+
+<button class="btnEdit" onclick="edit(${i})">Edit</button>
+
+<button class="btnHapus" onclick="hapus(${i})">Hapus</button>
+
+</td>
+
+</tr>
+`
+})
+
+document.getElementById("data").innerHTML=html
+document.getElementById("totalHutang").innerText=rupiah(total)
+
+localStorage.setItem("dataHutang",JSON.stringify(data))
+
+}
+
+function tambah(){
+
+let nama=document.getElementById("nama").value
+let jumlah=Number(document.getElementById("jumlah").value)
+let pinjam=document.getElementById("tglPinjam").value
+
+if(!nama || !jumlah || !pinjam){
+alert("Lengkapi data")
+return
+}
+
+if(editIndex==-1){
+
+data.push({
+nama:nama,
+jumlah:jumlah,
+pinjam:pinjam,
+lunas:false,
+tglLunas:""
+})
+
+}else{
+
+data[editIndex].nama=nama
+data[editIndex].jumlah=jumlah
+data[editIndex].pinjam=pinjam
+
+editIndex=-1
+}
+
+resetForm()
+tampil()
+
+}
+
+function edit(i){
+
+document.getElementById("nama").value=data[i].nama
+document.getElementById("jumlah").value=data[i].jumlah
+document.getElementById("tglPinjam").value=data[i].pinjam
+
+editIndex=i
+
+}
+
+function hapus(i){
+
+if(confirm("Hapus data?")){
+data.splice(i,1)
+tampil()
+}
+
+}
+
+function cek(i){
+
+data[i].lunas=!data[i].lunas
+
+if(data[i].lunas){
+
+data[i].tglLunas=new Date().toLocaleDateString("id-ID")
+
+}else{
+
+data[i].tglLunas=""
+
+}
+
+tampil()
+
+}
+
+function resetForm(){
+
+document.getElementById("nama").value=""
+document.getElementById("jumlah").value=""
+document.getElementById("tglPinjam").value=""
+
+}
+
+tampil()
+
+</script>
+
+</body>
+</html>
