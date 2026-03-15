@@ -1,301 +1,535 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Catatan Hutang Pro</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Catatan Hutang Pro ✦</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
 
-<style>
-body{
-font-family:Arial, sans-serif;
-background:linear-gradient(135deg,#4f46e5,#22c1c3);
-margin:0;
-padding:20px;
-display:flex;
-justify-content:center;
-}
+    body {
+      background: linear-gradient(145deg, #0b1120 0%, #1a2639 100%);
+      margin: 0;
+      padding: 14px 10px;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
 
-.container{
-width:100%;
-max-width:430px;
-background:white;
-padding:20px;
-border-radius:15px;
-box-shadow:0 10px 30px rgba(0,0,0,0.25);
-}
+    .container {
+      max-width: 430px;
+      width: 100%;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-radius: 32px;
+      padding: 22px 18px;
+      box-shadow: 0 20px 40px -8px rgba(0,20,30,0.5), 0 8px 16px -6px rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.3);
+    }
 
-h2{
-text-align:center;
-margin-bottom:20px;
-}
+    h2 {
+      margin: 0 0 18px 0;
+      font-weight: 700;
+      font-size: 1.9rem;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #1e2b5e, #2d6a4f);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-left: 6px;
+    }
+    h2 span {
+      font-size: 2rem;
+      background: none;
+      -webkit-text-fill-color: initial;
+      color: #f97316;
+    }
 
-.input-box{
-margin-bottom:12px;
-}
+    /* form card */
+    .form-card {
+      background: #f8fafd;
+      border-radius: 24px;
+      padding: 18px 16px;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.02), 0 6px 12px -6px rgba(0,20,10,0.2);
+      border: 1px solid #ffffff;
+      margin-bottom: 16px;
+    }
 
-label{
-font-weight:bold;
-font-size:14px;
-}
+    .input-box {
+      margin-bottom: 14px;
+    }
 
-input{
-width:100%;
-padding:10px;
-margin-top:5px;
-border-radius:8px;
-border:1px solid #ccc;
-font-size:14px;
-}
+    label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+    label i { font-style: normal; color: #f97316; }
 
-button{
-width:100%;
-padding:12px;
-border:none;
-border-radius:10px;
-background:#4f46e5;
-color:white;
-font-size:15px;
-margin-top:10px;
-cursor:pointer;
-}
+    /* input rupiah khusus angka + desimal + titik */
+    .rupiah-input {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 18px;
+      border: 1.5px solid #e2e8f0;
+      background: white;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: #0f172a;
+      outline: none;
+      transition: 0.15s;
+      letter-spacing: 0.3px;
+    }
+    .rupiah-input:focus {
+      border-color: #f97316;
+      box-shadow: 0 0 0 3px rgba(249,115,22,0.2);
+    }
 
-button:hover{
-background:#4338ca;
-}
+    /* hilangkan spinner number */
+    .rupiah-input[type="text"] {
+      -moz-appearance: textfield;
+      appearance: textfield;
+    }
 
-.totalBox{
-margin-top:15px;
-padding:12px;
-background:#eef2ff;
-border-radius:10px;
-font-weight:bold;
-text-align:center;
-}
+    /* container untuk date + tombol setel */
+    .date-wrapper {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .date-wrapper input[type="date"] {
+      flex: 1;
+      padding: 13px 12px;
+      border-radius: 18px;
+      border: 1.5px solid #e2e8f0;
+      background: white;
+      font-size: 1rem;
+      color: #1e293b;
+      font-family: inherit;
+      outline: none;
+    }
+    .date-wrapper input[type="date"]::-webkit-calendar-picker-indicator {
+      opacity: 0.5;
+      padding: 6px;
+    }
+    .btn-setel {
+      background: #f1f5f9;
+      border: 1.5px solid #cbd5e1;
+      color: #1e293b;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 10px 16px;
+      border-radius: 30px;
+      white-space: nowrap;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      transition: 0.2s;
+    }
+    .btn-setel:hover {
+      background: #e2e8f0;
+      border-color: #94a3b8;
+    }
 
-table{
-width:100%;
-margin-top:20px;
-border-collapse:collapse;
-font-size:13px;
-}
+    button.primary {
+      width: 100%;
+      padding: 16px 12px;
+      background: linear-gradient(115deg, #f97316, #fb923c);
+      border: none;
+      border-radius: 40px;
+      color: white;
+      font-weight: 700;
+      font-size: 1.2rem;
+      letter-spacing: 0.5px;
+      box-shadow: 0 8px 18px -6px #f97316;
+      margin: 8px 0 6px 0;
+      cursor: pointer;
+      transition: 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    button.primary:active { transform: scale(0.97); background: #f97316; }
 
-th,td{
-padding:8px;
-border-bottom:1px solid #ddd;
-text-align:left;
-}
+    .totalBox {
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      color: white;
+      padding: 16px 18px;
+      border-radius: 24px;
+      margin: 14px 0 18px 0;
+      font-weight: 700;
+      font-size: 1.3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid #f1c40f;
+      box-shadow: 0 8px 0 #0b121c;
+    }
+    .totalBox span {
+      background: #f97316;
+      padding: 6px 18px;
+      border-radius: 40px;
+      font-size: 1.2rem;
+      color: #0f172a;
+      background: #fde68a;
+      letter-spacing: 0.5px;
+      font-weight: 800;
+    }
 
-th{
-background:#f1f5f9;
-}
+    /* tabel lebih kecil & rapi */
+    .table-wrapper {
+      overflow-x: auto;
+      border-radius: 22px;
+      background: #f1f5f9;
+      padding: 4px 2px;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.68rem; /* diperkecil agar muat */
+      min-width: 380px;
+    }
 
-.lunas{
-color:green;
-font-weight:bold;
-}
+    th {
+      background: #334155;
+      color: white;
+      font-weight: 600;
+      padding: 10px 4px;
+      text-align: center;
+      font-size: 0.7rem;
+      letter-spacing: 0.3px;
+      border-bottom: 2px solid #f97316;
+    }
+    td {
+      padding: 10px 4px;
+      text-align: center;
+      background-color: white;
+      border-bottom: 1px solid #e9edf2;
+      font-weight: 500;
+    }
 
-.belum{
-color:red;
-font-weight:bold;
-}
+    /* warna status */
+    .lunas {
+      color: #0f7b5a;
+      font-weight: 700;
+      background: #d1fae5;
+      padding: 4px 6px;
+      border-radius: 20px;
+      display: inline-block;
+      font-size: 0.65rem;
+    }
+    .belum {
+      color: #b91c1c;
+      font-weight: 700;
+      background: #fee2e2;
+      padding: 4px 6px;
+      border-radius: 20px;
+      display: inline-block;
+      font-size: 0.65rem;
+    }
 
-.action button{
-width:auto;
-padding:5px 8px;
-margin-right:5px;
-font-size:12px;
-border-radius:6px;
-}
+    td:first-child { font-weight: 600; color: #0f172a; text-align: left; padding-left: 8px; }
+    td:nth-child(2) { font-weight: 700; color: #1e3a5f; }
 
-.btnEdit{background:#f59e0b}
-.btnHapus{background:#ef4444}
-</style>
+    /* aksi lebih kecil */
+    .action {
+      display: flex;
+      gap: 4px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .action button {
+      border: none;
+      padding: 5px 8px;
+      border-radius: 40px;
+      font-size: 0.6rem;
+      font-weight: 700;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .btnEdit {
+      background: #f97316;
+    }
+    .btnHapus {
+      background: #b91c1c;
+    }
+    /* checkbox lebih kecil */
+    input[type=checkbox] {
+      transform: scale(0.75);
+      margin: 2px;
+      accent-color: #059669;
+    }
+
+    /* teks bantuan kecil */
+    .hint {
+      font-size: 0.65rem;
+      color: #475569;
+      margin: 8px 0 0 6px;
+    }
+  </style>
 </head>
-
 <body>
-
 <div class="container">
+  <h2>
+    <span>📘</span> Catatan Hutang Pro
+  </h2>
 
-<h2>📒 Catatan Hutang</h2>
+  <div class="form-card">
+    <!-- NAMA -->
+    <div class="input-box">
+      <label><i>👤</i> Nama</label>
+      <input type="text" id="nama" placeholder="Contoh: Warung Bu Ani" class="rupiah-input" style="padding:12px 16px;">
+    </div>
 
-<div class="input-box">
-<label>Nama</label>
-<input type="text" id="nama">
-</div>
+    <!-- JUMLAH HUTANG (Rupiah dengan keypad numerik + titik) -->
+    <div class="input-box">
+      <label><i>💰</i> Jumlah Hutang (Rp)</label>
+      <input type="text" id="jumlah" inputmode="decimal" autocomplete="off" 
+             class="rupiah-input" placeholder="0" 
+             onkeyup="formatRupiah(this)" onkeypress="hanyaAngka(event)">
+    </div>
 
-<div class="input-box">
-<label>Jumlah Hutang</label>
-<input type="number" id="jumlah">
-</div>
+    <!-- TANGGAL dengan tombol SETEL -->
+    <div class="input-box">
+      <label><i>📅</i> Tanggal Pinjam</label>
+      <div class="date-wrapper">
+        <input type="date" id="tglPinjam" value="">
+        <button type="button" class="btn-setel" id="setelTglBtn">📆 Setel</button>
+      </div>
+    </div>
 
-<div class="input-box">
-<label>Tanggal Pinjam</label>
-<input type="date" id="tglPinjam">
-</div>
+    <button class="primary" onclick="tambah()">💾 Simpan Hutang</button>
+  </div>
 
-<button onclick="tambah()">💾 Simpan Hutang</button>
+  <!-- TOTAL HUTANG -->
+  <div class="totalBox">
+    <span>🪙 Total</span>
+    <span id="totalHutang">0</span>
+  </div>
 
-<div class="totalBox">
-Total Hutang: Rp <span id="totalHutang">0</span>
-</div>
-
-<table>
-<thead>
-<tr>
-<th>Nama</th>
-<th>Hutang</th>
-<th>Pinjam</th>
-<th>Status</th>
-<th>Aksi</th>
-</tr>
-</thead>
-
-<tbody id="data"></tbody>
-
-</table>
-
+  <!-- TABEL HUTANG (kolom lebih kecil) -->
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Nama</th>
+          <th>Hutang</th>
+          <th>Tgl Pinjam</th>
+          <th>Status</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody id="data"></tbody>
+    </table>
+  </div>
+  <div class="hint">★ centang status untuk ubah lunas/belum</div>
 </div>
 
 <script>
+  let data = JSON.parse(localStorage.getItem("dataHutang")) || [];
+  let editIndex = -1;
 
-let data = JSON.parse(localStorage.getItem("dataHutang")) || []
-let editIndex = -1
+  // --- fungsi rupiah: parse dari string bertitik ke angka ---
+  function rupiahToNumber(str) {
+    if (!str) return 0;
+    // hapus semua kecuali digit dan koma (desimal)
+    let cleaned = str.replace(/\./g, '').replace(',', '.'); // ganti koma desimal jadi titik
+    let num = parseFloat(cleaned);
+    return isNaN(num) ? 0 : num;
+  }
 
-function rupiah(x){
-return x.toLocaleString("id-ID")
-}
+  // format angka ke rupiah (dengan titik, 2 desimal maks)
+  function formatNumberToRupiah(angka) {
+    if (angka === undefined || angka === null) return '0';
+    // bulatkan maks 2 desimal, pisahkan ribuan
+    let bagian = angka.toFixed(2).split('.');
+    let ribuan = bagian[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    let desimal = bagian[1] === '00' ? '' : ',' + bagian[1].replace(/0+$/, ''); // buang desimal jika 00
+    return ribuan + (desimal || '');
+  }
 
-function tampil(){
+  // input langsung diformat ketika mengetik
+  function formatRupiah(elem) {
+    let value = elem.value;
+    // ambil hanya angka, koma, titik (tapi kita bersihkan)
+    let cleaned = value.replace(/[^\d,]/g, '');   // hanya digit dan koma
+    cleaned = cleaned.replace(/,+/g, ',');        // hanya satu koma
+    if (cleaned.startsWith(',')) cleaned = '0' + cleaned;
+    if (cleaned === '') {
+      elem.value = '';
+      return;
+    }
+    // ubah ke float sementara untuk format
+    let floatVal = parseFloat(cleaned.replace(',', '.'));
+    if (isNaN(floatVal)) floatVal = 0;
+    elem.value = formatNumberToRupiah(floatVal);
+  }
 
-let html=""
-let total=0
+  // hanya izinkan angka dan koma
+  function hanyaAngka(e) {
+    let key = e.key;
+    if (key === ',' || key === '.' || key === 'Backspace' || key === 'Delete' || key === 'ArrowLeft' || key === 'ArrowRight') return true;
+    if (isNaN(key) && key !== ',') {
+      e.preventDefault();
+      return false;
+    }
+    return true;
+  }
 
-data.forEach((d,i)=>{
+  // mengambil nilai dari input rupiah (mengembalikan number)
+  function getJumlahFromInput() {
+    let str = document.getElementById('jumlah').value;
+    return rupiahToNumber(str);
+  }
 
-if(!d.lunas) total+=d.jumlah
+  // menampilkan total / tabel
+  function rupiah(x) {
+    return formatNumberToRupiah(x);
+  }
 
-html+=`
-<tr>
+  // fungsi tampil (render tabel)
+  function tampil() {
+    let html = "";
+    let total = 0;
 
-<td>${d.nama}</td>
+    data.forEach((d, i) => {
+      if (!d.lunas) total += d.jumlah;
 
-<td>Rp ${rupiah(d.jumlah)}</td>
+      let statusHtml = d.lunas 
+        ? `<span class="lunas">✅ Lunas ${d.tglLunas ? '<br>' + d.tglLunas : ''}</span>` 
+        : `<span class="belum">⏳ Belum</span>`;
 
-<td>${d.pinjam}</td>
+      html += `<tr>
+        <td style="max-width:70px; overflow:hidden; text-overflow:ellipsis;" title="${d.nama}">${d.nama}</td>
+        <td>Rp ${rupiah(d.jumlah)}</td>
+        <td>${d.pinjam}</td>
+        <td>
+          <input type="checkbox" onchange="cek(${i})" ${d.lunas ? 'checked' : ''}>
+          <br>${statusHtml}
+        </td>
+        <td>
+          <div class="action">
+            <button class="btnEdit" onclick="edit(${i})">✎ Edit</button>
+            <button class="btnHapus" onclick="hapus(${i})">🗑 Hapus</button>
+          </div>
+        </td>
+      </tr>`;
+    });
 
-<td>
+    document.getElementById("data").innerHTML = html;
+    document.getElementById("totalHutang").innerText = rupiah(total);
+    localStorage.setItem("dataHutang", JSON.stringify(data));
+  }
 
-<input type="checkbox" onchange="cek(${i})" ${d.lunas?'checked':''}>
+  // tambah / update data
+  function tambah() {
+    let nama = document.getElementById("nama").value.trim();
+    let jumlah = getJumlahFromInput();
+    let pinjam = document.getElementById("tglPinjam").value;
 
-<br>
+    if (!nama || jumlah <= 0 || !pinjam) {
+      alert("Lengkapi data: nama, jumlah (min 1), dan tanggal pinjam!");
+      return;
+    }
 
-${d.lunas ? "Lunas "+d.tglLunas : "<span class='belum'>Belum</span>"}
+    if (editIndex === -1) {
+      data.push({
+        nama: nama,
+        jumlah: jumlah,
+        pinjam: pinjam,
+        lunas: false,
+        tglLunas: ""
+      });
+    } else {
+      data[editIndex].nama = nama;
+      data[editIndex].jumlah = jumlah;
+      data[editIndex].pinjam = pinjam;
+      editIndex = -1;
+    }
 
-</td>
+    resetForm();
+    tampil();
+  }
 
-<td class="action">
+  function edit(i) {
+    document.getElementById("nama").value = data[i].nama;
+    // set input jumlah dengan format rupiah
+    document.getElementById("jumlah").value = formatNumberToRupiah(data[i].jumlah);
+    document.getElementById("tglPinjam").value = data[i].pinjam;
+    editIndex = i;
+  }
 
-<button class="btnEdit" onclick="edit(${i})">Edit</button>
+  function hapus(i) {
+    if (confirm("Hapus data ini?")) {
+      data.splice(i, 1);
+      tampil();
+    }
+  }
 
-<button class="btnHapus" onclick="hapus(${i})">Hapus</button>
+  function cek(i) {
+    data[i].lunas = !data[i].lunas;
+    if (data[i].lunas) {
+      let now = new Date();
+      let tgl = now.toLocaleDateString("id-ID", { day: '2-digit', month:'short', year:'numeric' });
+      data[i].tglLunas = tgl;
+    } else {
+      data[i].tglLunas = "";
+    }
+    tampil();
+  }
 
-</td>
+  function resetForm() {
+    document.getElementById("nama").value = "";
+    document.getElementById("jumlah").value = "";
+    document.getElementById("tglPinjam").value = "";
+  }
 
-</tr>
-`
-})
+  // --- tombol setel tanggal: hari ini ---
+  document.getElementById("setelTglBtn").addEventListener("click", function() {
+    let today = new Date();
+    let yyyy = today.getFullYear();
+    let mm = String(today.getMonth() + 1).padStart(2, '0');
+    let dd = String(today.getDate()).padStart(2, '0');
+    let todayStr = `${yyyy}-${mm}-${dd}`;
+    document.getElementById("tglPinjam").value = todayStr;
+  });
 
-document.getElementById("data").innerHTML=html
-document.getElementById("totalHutang").innerText=rupiah(total)
+  // inisialisasi: setel tanggal hari ini jika kosong (opsional)
+  window.addEventListener('load', function() {
+    let tglInput = document.getElementById("tglPinjam");
+    if (!tglInput.value) {
+      let today = new Date();
+      let yyyy = today.getFullYear();
+      let mm = String(today.getMonth() + 1).padStart(2, '0');
+      let dd = String(today.getDate()).padStart(2, '0');
+      tglInput.value = `${yyyy}-${mm}-${dd}`;
+    }
+    tampil();
+  });
 
-localStorage.setItem("dataHutang",JSON.stringify(data))
+  // agar input rupiah konsisten jika ditinggalkan
+  document.getElementById("jumlah").addEventListener("blur", function(e) {
+    let val = getJumlahFromInput();
+    if (val === 0) e.target.value = '';
+    else e.target.value = formatNumberToRupiah(val);
+  });
 
-}
-
-function tambah(){
-
-let nama=document.getElementById("nama").value
-let jumlah=Number(document.getElementById("jumlah").value)
-let pinjam=document.getElementById("tglPinjam").value
-
-if(!nama || !jumlah || !pinjam){
-alert("Lengkapi data")
-return
-}
-
-if(editIndex==-1){
-
-data.push({
-nama:nama,
-jumlah:jumlah,
-pinjam:pinjam,
-lunas:false,
-tglLunas:""
-})
-
-}else{
-
-data[editIndex].nama=nama
-data[editIndex].jumlah=jumlah
-data[editIndex].pinjam=pinjam
-
-editIndex=-1
-}
-
-resetForm()
-tampil()
-
-}
-
-function edit(i){
-
-document.getElementById("nama").value=data[i].nama
-document.getElementById("jumlah").value=data[i].jumlah
-document.getElementById("tglPinjam").value=data[i].pinjam
-
-editIndex=i
-
-}
-
-function hapus(i){
-
-if(confirm("Hapus data?")){
-data.splice(i,1)
-tampil()
-}
-
-}
-
-function cek(i){
-
-data[i].lunas=!data[i].lunas
-
-if(data[i].lunas){
-
-data[i].tglLunas=new Date().toLocaleDateString("id-ID")
-
-}else{
-
-data[i].tglLunas=""
-
-}
-
-tampil()
-
-}
-
-function resetForm(){
-
-document.getElementById("nama").value=""
-document.getElementById("jumlah").value=""
-document.getElementById("tglPinjam").value=""
-
-}
-
-tampil()
-
+  tampil();
 </script>
-
 </body>
 </html>
